@@ -1,0 +1,97 @@
+*****************************************************************************************
+
+						CONFIGURATION OF OFFLINE TOOLS
+
+*****************************************************************************************
+FoldX
+	Download the Academic license version, Unzip the tar
+	set env in ~/.bashrc "export PATH=$PATH:/path/to/foldX"
+	Can be run from any folder
+	Manual can be accessed from http://foldxsuite.crg.eu/documentation#manual
+	
+MAESTRO (Protein Bioinformatics@University of Salzburg)
+	Download from https://pbwww.services.came.sbg.ac.at/?page_id=477
+	Change the path to MAESTRO directory in auto_maestro.py
+
+I-Mutant2.0.7
+	Download from https://folding.biofold.org/i-mutant//pages/I-Mutant2.0_Down.html
+	I-Mutant needs python2.X version (or higher) and the numpy package
+	Change the path to I-Mutant2.0 directory in auto_iMutant2.py
+
+PhD-SNP2.0.7
+	Download from https://snps.biofold.org/phd-snp/pages/PhD-SNP_Down.html
+	To run PhD-SNP you need python, python-numpy or python-numeric, 
+blastpgp and formatdb programs
+	Copy the uniref90.fasta file to DB directory
+	Change the path to PhD-SNP directory in auto_phdSNP.py
+
+MUpro
+	Download from http://download.igb.uci.edu/
+	If svm_classify is not present in server directory, download and copy to server directory.
+	In configure.pl, change the $install_dir variable to the directory of MUpro
+	Change the directory in auto_mupro.py
+
+PANTHER-PSEP
+	Download from http://data.pantherdb.org/ftp/cSNP_analysis/current_release/
+	Unzip scripts, BLAST, PAML_RST 
+	Change the path to PANTHER in auto_panther.py
+	
+
+MutPred2
+	Download from http://mutpred.mutdb.org/#dload
+	Change the path to MutPred2 in auto_mutpred2.py
+
+*****************************************************************************************	
+
+					SETUP REQUIRED FOR ONLINE TOOLS
+
+*****************************************************************************************
+	
+Just copy all the scripts to the folder along with automate.py
+
+#TO CHECK MAILS FOR PON-P2
+
+Edit the checkmails.sh file for the final directory 
+Set up cron for running the checkmails.sh, to check the mails every 15 mins
+	crontab -e 
+		*/15 * * * * bash /path/to/checkmails.sh
+	
+#SETTING UP MAILSERVER
+	-Download Postfix -> sudo apt-get update && sudo apt-get install postfix mailutils
+		Option 3 Internet site with smarthost (that can be setup with fetchmail) -> domain.name
+	-To receive mails -> fetchmail -v -f /etc/.fetchmailrc
+	-For reading the mails -> mailx or mail
+
+.fetchmailrc 
+	set syslog
+	set daemon 100
+	poll domain.name
+        with nodns,
+        with protocol IMAP
+        user "mailusername" there is username here,
+        with password *******,
+        with ssl, sslcertck;
+*****************************************************************************************
+			
+Python Version - python3
+Packages required
+
+#	mechanicalsoup
+#	os
+#	sys
+#	re
+#	getpass
+#	pandas
+#	mboxattachments
+#	multiprocessing
+
+In the script automate.py, the processes can be changed by the user depending on the number of 
+cores/processors available. The run of different tools can be split to different processes
+as required.
+
+Run the script using the following command with the arguments in the same order as below
+	python3 automate.py fastaFile mutationListFile PDBFile UNIPROTID
+	
+	Final results will be in outFiles directory in CSV format
+	Log files will be in logFiles directory
+*****************************************************************************************
